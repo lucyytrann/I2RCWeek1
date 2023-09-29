@@ -30,8 +30,10 @@ public class TankDrive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    //this gets the amount of power in the motor for the left 
     double leftPowerRaw = joy.getRawAxis(1);
 
+    //this sets the power using the tank drive method 
     double rightPowerRaw = joy.getRawAxis(5);
 
     dt.tankDrive(leftPowerRaw*-0.7, rightPowerRaw*-0.7);
@@ -39,12 +41,14 @@ public class TankDrive extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
+  //Set the robot's speed to zero and make it stop
   public void end(boolean interrupted) {
     dt.tankDrive(0.0, 0.0);
   }
 
   // Returns true when the command should end.
   @Override
+  //It is never finish
   public boolean isFinished() {
     return false;
   }

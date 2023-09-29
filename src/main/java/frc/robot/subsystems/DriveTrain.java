@@ -43,58 +43,54 @@ public class DriveTrain extends SubsystemBase
     leftDriveTalon.setNeutralMode(NeutralMode.Coast);
     rightDriveTalon.setNeutralMode(NeutralMode.Coast);
 
-    //Set true to inverted of leftDriveTalon, set false to inverted of rightDriveTalan
     leftDriveTalon.setInverted(true);
     rightDriveTalon.setInverted(false);
 
-    //Set true to sensor phase of both leftDriveTalon and rightDriveTalon
     leftDriveTalon.setSensorPhase(true);
     rightDriveTalon.setSensorPhase(true);
     
-    //Config the Factory Defalt of the leftDriveTalon
     leftDriveTalon.configFactoryDefault();
-    //Config the selected feedback sensor of the leftDriveTalon
     leftDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-    //Config the factory defalt of the rightDriveTalon
     rightDriveTalon.configFactoryDefault();
-    //Config the selected feedback sensor of the rightDriveTalon
     rightDriveTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 
   }
-  //Set the rightSpeed of the EightDriveTalon and set the leftSpeed of the leftDriveTalon
+  //It is a tank drive that drives the motors 
   public void tankDrive(double leftSpeed, double rightSpeed) {
     rightDriveTalon.set(rightSpeed);
     leftDriveTalon.set(leftSpeed);
   }
 
-  //Reset tthe encoders 
+  //Sensors that marks the ticks (position sensor)
   public void resetEncoders() {
     leftDriveTalon.setSelectedSensorPosition(0,0,10);
     rightDriveTalon.setSelectedSensorPosition(0,0,10);
   }
 
-  //Return the TIcks by calculated the average of selected sensor position of leftDriveTalon and rightDriveTalon
+  // Count the ticks, gets position
   public double getTicks() {
     return (leftDriveTalon.getSelectedSensorPosition(0) + rightDriveTalon.getSelectedSensorPosition(0)) / 2.0;
   }
  
-  //Get angle of navx
+  //Get angle of the unit circle 
   public double getAngle(){
     return navx.getAngle(); 
   }
  
-  //Reset the navx
+  //Reset the angle to 0
   public void resetNavx(){
     navx.reset();
   }
 
-  //Override the periodic by using SmartDashboard value 
+  
   @Override
   public void periodic() {
+    //Puts the data values that we want onto smartdashboard
     SmartDashboard.putNumber("Left Voltage", leftDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Right Voltage", rightDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Angle", navx.getAngle());
 
+    //Set percent of the motor power
     LeftVoltage.setDouble(leftDriveTalon.getMotorOutputPercent());
     RightVoltage.setDouble(rightDriveTalon.getMotorOutputPercent());
 
