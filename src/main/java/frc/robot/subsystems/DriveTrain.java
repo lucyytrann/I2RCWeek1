@@ -43,8 +43,8 @@ public class DriveTrain extends SubsystemBase
     leftDriveTalon.setNeutralMode(NeutralMode.Coast);
     rightDriveTalon.setNeutralMode(NeutralMode.Coast);
 
-    leftDriveTalon.setInverted(true);
-    rightDriveTalon.setInverted(false);
+    leftDriveTalon.setInverted(false);
+    rightDriveTalon.setInverted(true);
 
     leftDriveTalon.setSensorPhase(true);
     rightDriveTalon.setSensorPhase(true);
@@ -72,6 +72,11 @@ public class DriveTrain extends SubsystemBase
     return (leftDriveTalon.getSelectedSensorPosition(0) + rightDriveTalon.getSelectedSensorPosition(0)) / 2.0;
   }
  
+  public double ticksToMeters(){
+    return (getTicks() * 0.1524 * Math.PI)/4096;
+    //method is a function that you can reuse, and it have an input and ouput
+  }
+
   //Get angle of the unit circle 
   public double getAngle(){
     return navx.getAngle(); 
@@ -89,7 +94,13 @@ public class DriveTrain extends SubsystemBase
     SmartDashboard.putNumber("Left Voltage", leftDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Right Voltage", rightDriveTalon.getMotorOutputPercent());
     SmartDashboard.putNumber("Angle", navx.getAngle());
-
+    SmartDashboard.putNumber("Ticks", getTicks());
+    //Move the ticks and and ticks
+    //Encoder values 
+    SmartDashboard.putNumber("Left Voltage", leftDriveTalon.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Right Voltage", rightDriveTalon.getSelectedSensorPosition());
+    SmartDashboard.putNumber("Meters Driven", ticksToMeters());
+    
     //Set percent of the motor power
     LeftVoltage.setDouble(leftDriveTalon.getMotorOutputPercent());
     RightVoltage.setDouble(rightDriveTalon.getMotorOutputPercent());

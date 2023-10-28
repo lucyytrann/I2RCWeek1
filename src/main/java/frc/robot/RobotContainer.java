@@ -8,6 +8,7 @@ import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -17,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
+
+//Hold both the command and subsystem (substems - physical part of the robot)
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
@@ -28,9 +31,14 @@ public class RobotContainer {
 
   private final TankDrive tankDrive = new TankDrive(dt, joy1);
 
+  private final EncoderDrive encoderDrive;
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    dt.setDefaultCommand(tankDrive);
+    //initiallize the encoder
+    encoderDrive = new EncoderDrive (dt, 1.0);
+    dt.setDefaultCommand (tankDrive);
+    dt.setDefaultCommand(encoderDrive);
     // Configure the trigger bindings
     configureBindings();
   }
@@ -55,6 +63,18 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return null;
+    return new SequentialCommandGroup(
+      new PIDTurn (dt, 90.0),
+      new EncoderDrive (dt, 1.0),
+
+      new PIDTurn (dt, 90.0),
+      new EncoderDrive (dt, 1.0),
+
+      new PIDTurn (dt, 90.0),
+      new EncoderDrive (dt, 1.0),
+
+      new PIDTurn (dt, 90.0),
+      new EncoderDrive (dt, 1.0)
+    );
   }
 }
